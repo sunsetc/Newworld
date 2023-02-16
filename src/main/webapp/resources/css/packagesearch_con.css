@@ -1,0 +1,121 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	min-height:800px;
+	
+	
+}
+
+
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+
+.packagepage{
+ position: relative;
+ top: 50px;
+ left: 640px;
+ width: 910px;
+ height: auto;
+ margin-bottom:50px;
+ font-family: 'NanumSquareNeo';
+}
+
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+/*사이드메뉴*/
+.sidemeun {
+ position: absolute;
+ top: 50px;
+ left: 350px;
+ width: 0px;
+ height: 200px;
+}
+
+.cusstmenu {
+	width: 155px;
+	font-size: 30px;
+	font-family: 'NanumSquareNeoExtraBold';
+	line-height: 72px;
+	border-bottom: 2px solid #6799FF;
+}
+
+.notemenu, .qnamenu, .faqmenu {
+	position: relative;
+	line-height: 50px;
+	border-bottom: 1px solid #BDBDBD;
+	list-style:none;
+	left: -30px;
+	width: 155px;
+}
+
+
+/*테이블*/
+.table-borderless {
+	position: relative;
+
+}
+
+.table-borderless tr {
+	font-family: 'NanumGothic';
+	font-size: 16px;
+	text-align: left;
+}
+
+
+.nav-tabs li{
+	position: relative;
+	left:0px;
+}
+
+/* 페이지 버튼 */
+.pagination {
+	position: relative;
+	left:400px;
+	cursor: pointer;
+}

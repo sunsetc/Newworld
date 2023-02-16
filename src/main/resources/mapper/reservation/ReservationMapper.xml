@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.ReservationMapper">
+	
+	<!-- 공통 -->
+	
+	<select id="getGoodsFlight" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 예약 페이지에 항공, 상품 테이블에서 정보 불러오기 -->
+		SELECT HG.GI_NAME, HG.GI_ETC, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT, HG.GI_CODE, HG.GI_PRICE_ADULT, HG.GI_PRICE_KID, HG.GI_PRICE_BABY,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+		UNION ALL
+		SELECT FG.GI_NAME, FG.GI_ETC, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT, FG.GI_CODE, FG.GI_PRICE_ADULT, FG.GI_PRICE_KID, FG.GI_PRICE_BABY,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+	</select>
+	
+	<select id="maxGoodsInfos" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 패키지 구매 정원 초과 제한 -->
+		SELECT * FROM FOREIGN_GOODS_INFO FG WHERE FG.GI_CODE = #{giCode}
+		AND FG.GI_MAX &gt; (SELECT SUM(RI.RI_ADULT_COUNT+RI.RI_KIDS_COUNT+RI.RI_BABY_COUNT)+#{riAdultCount}+#{riKidsCount}+#{riBabyCount} 
+		FROM RESERV_INFO RI WHERE RI.GI_CODE = #{giCode} AND RI.RI_ACTIVE = '0')
+		UNION ALL
+		SELECT * FROM HOME_GOODS_INFO HG WHERE HG.GI_CODE = #{giCode}
+		AND HG.GI_MAX &gt; (SELECT SUM(RI.RI_ADULT_COUNT+RI.RI_KIDS_COUNT+RI.RI_BABY_COUNT)+#{riAdultCount}+#{riKidsCount}+#{riBabyCount} 
+		FROM RESERV_INFO RI WHERE RI.GI_CODE = #{giCode} AND RI.RI_ACTIVE = '0')
+	</select>
+	
+	<select id="maxGoods" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 1인당 구매 제한 -->
+		SELECT * FROM FOREIGN_GOODS_INFO FG WHERE FG.GI_CODE=#{giCode} AND FG.GI_1MAX >= #{riAdultCount}+#{riKidsCount}+#{riBabyCount}
+		UNION ALL
+		SELECT * FROM HOME_GOODS_INFO HG WHERE HG.GI_CODE=#{giCode} AND HG.GI_1MAX >= #{riAdultCount}+#{riKidsCount}+#{riBabyCount}
+	</select>
+	
+	<select id="nullCount" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 예약인원이 없다면 NULL이 될거라 위에 maxGoodsInfos로 패키지 구매 정원 제한 비교가 안된다. 그래서 현재 입력한 수로 패키지 정원이랑 비교하게끔 함 -->
+		SELECT * FROM FOREIGN_GOODS_INFO FG WHERE FG.GI_CODE=#{giCode} AND FG.GI_MAX >= #{riAdultCount}+#{riKidsCount}+#{riBabyCount}
+		UNION ALL
+		SELECT * FROM HOME_GOODS_INFO HG WHERE HG.GI_CODE=#{giCode} AND HG.GI_MAX >= #{riAdultCount}+#{riKidsCount}+#{riBabyCount}
+	</select>
+	
+	<select id="codeCount" resultType="xyz.tour.newworld.vo.ReservationInfoVO"> <!-- DB에 같은 상품코드로 현재 예약인원이 있는지 확인 -->
+		SELECT SUM(RI_ADULT_COUNT+RI_KIDS_COUNT+RI_BABY_COUNT) SUM FROM RESERV_INFO WHERE GI_CODE = #{giCode} AND RI_ACTIVE = '0'
+	</select>
+	
+	<select id="selectReservation" resultType="xyz.tour.newworld.vo.ReservationInfoVO"> <!-- 패키지 1인당 1개만 구매하게 하려고 구매한 기록이 있는지 조회 -->
+		SELECT * FROM RESERV_INFO WHERE GI_CODE = #{giCode} AND UI_ID = #{uiId} AND RI_ACTIVE = '0'
+	</select>
+	
+	<select id="getReservations" resultType="xyz.tour.newworld.vo.ReservationInfoVO"> <!-- 예약 상세 페이지에 예약자 정보 불러오기 -->
+		SELECT RI_CODE, UI_NAME, UI_PHONE, UI_EMAIL, RI_TGI_PRICE FROM RESERV_INFO
+		WHERE GI_CODE = #{giCode} AND UI_ID = #{uiId} AND RI_ACTIVE = '0'
+	</select>
+	
+	<select id="getGoodsForeign" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 예약 상세 페이지에 상품 정보 불러오기 -->
+		SELECT FG.GI_NAME, FG.GI_PERIOD,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+		UNION ALL
+		SELECT HG.GI_NAME, HG.GI_PERIOD,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+	</select>
+	
+	<!-- 해외 -->
+	
+	<insert id="insertReservation" parameterType="xyz.tour.newworld.vo.ReservationInfoVO"> <!-- 패키지 예약 등록 -->
+		INSERT INTO RESERV_INFO(RI_CODE, RI_TGI_PRICE, RI_ADULT_COUNT, RI_KIDS_COUNT, RI_BABY_COUNT, UI_BIRTH, UI_NAME, UI_PHONE, UI_EMAIL, GI_CODE, UI_ID)
+		VALUES((SELECT CONCAT((SELECT DATE_FORMAT(NOW(),'%Y%m%d')),(SELECT 1000 + FLOOR(RAND()*9000)))), 
+		#{riTgiPrice}, #{riAdultCount}, #{riKidsCount}, #{riBabyCount}, #{uiBirth}, #{uiName}, #{uiPhone}, #{uiEmail}, #{giCode}, #{uiId})
+	</insert>
+	
+
+	<!-- 국내 -->
+	<insert id="insertHomeReservation" parameterType="xyz.tour.newworld.vo.ReservationInfoVO"> <!-- 패키지 예약 등록 -->
+		INSERT INTO RESERV_INFO(RI_CODE, RI_TGI_PRICE, RI_ADULT_COUNT, RI_KIDS_COUNT, RI_BABY_COUNT, UI_BIRTH, UI_NAME, UI_PHONE, UI_EMAIL, GI_CODE, UI_ID)
+		VALUES((SELECT CONCAT((SELECT DATE_FORMAT(NOW(),'%Y%m%d')),(SELECT 1000 + FLOOR(RAND()*9000)))), 
+		#{riTgiPrice}, #{riAdultCount}, #{riKidsCount}, #{riBabyCount}, #{uiBirth}, #{uiName}, #{uiPhone}, #{uiEmail}, #{giCode}, #{uiId})
+	</insert>
+
+	
+	<!-- 예약만 취소 -->
+	<update id="updateReservationActive" parameterType="xyz.tour.newworld.vo.ReservationInfoVO">
+		UPDATE RESERV_INFO
+		SET RI_ACTIVE=1
+		WHERE RI_CODE=#{riCode}
+	</update>
+	
+	<!-- 예약취소 & 결제취소 -->
+	<update id="updateReservationCheck" parameterType="xyz.tour.newworld.vo.ReservationInfoVO">
+		UPDATE RESERV_INFO
+		SET RI_CHECK = 0,
+		RI_ACTIVE = 1
+		WHERE RI_CODE = #{riCode}
+	</update>
+	
+	<!-- 동행인 상태 예약 취소로 변경 -->
+	<update id="companionCancel" parameterType="xyz.tour.newworld.vo.CompanionInfoVO">
+		UPDATE COMPANION_INFO
+		SET CO_RI_CHECK = '예약취소'
+		WHERE RI_CODE = #{riCode}
+	</update>
+	
+	
+	
+	
+
+	
+	
+	
+	<!-- 동행인 -->
+	<insert id="insertCompanion" parameterType="xyz.tour.newworld.vo.CompanionInfoVO"> <!-- 동행인 정보 입력 -->
+		INSERT INTO COMPANION_INFO(CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL, UI_ID, GI_CODE)
+		VALUES(#{coName}, #{coBirth}, #{coGender}, #{coEngFirst}, #{coEngName}, #{coPhone}, #{coEmail}, #{uiId}, #{giCode})
+	</insert>
+	
+	<insert id="insertCompanion2" parameterType="xyz.tour.newworld.vo.CompanionInfoVO">
+		INSERT INTO COMPANION_INFO(CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL, UI_ID, GI_CODE)
+		VALUES(#{coName}, #{coBirth}, #{coGender}, #{coEngFirst}, #{coEngName}, #{coPhone}, #{coEmail}, #{uiId}, #{giCode})
+		,(#{coName2}, #{coBirth2}, #{coGender2}, #{coEngFirst2}, #{coEngName2}, #{coPhone2}, #{coEmail2}, #{uiId}, #{giCode})
+	</insert>
+	
+	<insert id="insertCompanion3" parameterType="xyz.tour.newworld.vo.CompanionInfoVO">
+		INSERT INTO COMPANION_INFO(CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL, UI_ID, GI_CODE)
+		VALUES(#{coName}, #{coBirth}, #{coGender}, #{coEngFirst}, #{coEngName}, #{coPhone}, #{coEmail}, #{uiId}, #{giCode})
+		,(#{coName2}, #{coBirth2}, #{coGender2}, #{coEngFirst2}, #{coEngName2}, #{coPhone2}, #{coEmail2}, #{uiId}, #{giCode})
+		,(#{coName3}, #{coBirth3}, #{coGender3}, #{coEngFirst3}, #{coEngName3}, #{coPhone3}, #{coEmail3}, #{uiId}, #{giCode})
+	</insert>
+	
+	<insert id="insertCompanion4" parameterType="xyz.tour.newworld.vo.CompanionInfoVO">
+		INSERT INTO COMPANION_INFO(CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL, UI_ID, GI_CODE)
+		VALUES(#{coName}, #{coBirth}, #{coGender}, #{coEngFirst}, #{coEngName}, #{coPhone}, #{coEmail}, #{uiId}, #{giCode})
+		,(#{coName2}, #{coBirth2}, #{coGender2}, #{coEngFirst2}, #{coEngName2}, #{coPhone2}, #{coEmail2}, #{uiId}, #{giCode})
+		,(#{coName3}, #{coBirth3}, #{coGender3}, #{coEngFirst3}, #{coEngName3}, #{coPhone3}, #{coEmail3}, #{uiId}, #{giCode})
+		,(#{coName4}, #{coBirth4}, #{coGender4}, #{coEngFirst4}, #{coEngName4}, #{coPhone4}, #{coEmail4}, #{uiId}, #{giCode})
+	</insert>
+	
+	<insert id="insertCompanion5" parameterType="xyz.tour.newworld.vo.CompanionInfoVO">
+		INSERT INTO COMPANION_INFO(CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL, UI_ID, GI_CODE)
+		VALUES(#{coName}, #{coBirth}, #{coGender}, #{coEngFirst}, #{coEngName}, #{coPhone}, #{coEmail}, #{uiId}, #{giCode})
+		,(#{coName2}, #{coBirth2}, #{coGender2}, #{coEngFirst2}, #{coEngName2}, #{coPhone2}, #{coEmail2}, #{uiId}, #{giCode})
+		,(#{coName3}, #{coBirth3}, #{coGender3}, #{coEngFirst3}, #{coEngName3}, #{coPhone3}, #{coEmail3}, #{uiId}, #{giCode})
+		,(#{coName4}, #{coBirth4}, #{coGender4}, #{coEngFirst4}, #{coEngName4}, #{coPhone4}, #{coEmail4}, #{uiId}, #{giCode})
+		,(#{coName5}, #{coBirth5}, #{coGender5}, #{coEngFirst5}, #{coEngName5}, #{coPhone5}, #{coEmail5}, #{uiId}, #{giCode})
+	</insert>
+	
+	<update id="updateCompanion" parameterType="xyz.tour.newworld.vo.CompanionInfoVO"> <!-- 예약 코드 동행인 테이블에 입력 -->
+		UPDATE COMPANION_INFO CI
+		INNER JOIN
+		RESERV_INFO RI
+		SET
+		CI.RI_CODE = RI.RI_CODE
+		WHERE
+		CI.UI_ID = RI.UI_ID AND CI.GI_CODE = RI.GI_CODE AND RI.RI_ACTIVE = 0 AND CI.CO_RI_CHECK = '예약'
+	</update>
+	
+	
+	
+	<!-- 예약조회 -->
+	
+	<!-- 예약내역에서 로그인한 회원 국내&해외 예약내역 불러오기 -->
+	<select id="selectReserv" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT RI.RI_CODE, FG.GI_NAME, FG.GI_ETC, RI.UI_NAME, RI.RI_ACTIVE, LEFT(RI.RI_CODE,8) RI_DATE
+		FROM RESERV_INFO RI
+		INNER JOIN FOREIGN_GOODS_INFO FG
+		ON RI.GI_CODE = FG.GI_CODE
+		WHERE UI_ID=#{uiId}
+		UNION
+		SELECT RI.RI_CODE, HG.GI_NAME, HG.GI_ETC,  RI.UI_NAME, RI.RI_ACTIVE, LEFT(RI.RI_CODE,8)
+		FROM RESERV_INFO RI
+		INNER JOIN HOME_GOODS_INFO HG
+		ON RI.GI_CODE = HG.GI_CODE
+		WHERE UI_ID=#{uiId}
+		ORDER BY RI_DATE DESC
+	</select>
+	
+	<!-- 마이페이지에서 로그인한 회원 국내&해외 예약내역 불러오기 -->
+	<select id="selectReservMy" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT RI.RI_CODE, FG.GI_NAME, RI.UI_NAME, RI.RI_ACTIVE, LEFT(RI.RI_CODE,8) RI_DATE
+		FROM RESERV_INFO RI
+		INNER JOIN FOREIGN_GOODS_INFO FG
+		ON RI.GI_CODE = FG.GI_CODE
+		WHERE UI_ID=#{uiId}
+		UNION
+		SELECT RI.RI_CODE, HG.GI_NAME, RI.UI_NAME, RI.RI_ACTIVE, LEFT(RI.RI_CODE,8)
+		FROM RESERV_INFO RI
+		INNER JOIN HOME_GOODS_INFO HG
+		ON RI.GI_CODE = HG.GI_CODE
+		WHERE UI_ID=#{uiId}
+		ORDER BY RI_DATE DESC
+		LIMIT 0, 3
+	</select>
+	
+	<!-- 로그인한 회원 해당 예약번호의 상품정보,회원정보 불러오기 -->
+	<select id="selectReservView" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT RI.RI_CODE, RI.RI_CHECK, FG.GI_NAME, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT,
+		VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION,
+		VI.VI_NAME, VI.VI_CODE, RI.UI_NAME, RI.UI_PHONE, RI.UI_EMAIL, RI.UI_BIRTH,
+		RI.RI_ADULT_COUNT, RI.RI_KIDS_COUNT, RI.RI_BABY_COUNT, RI.RI_TGI_PRICE, RI.RI_CHECK, RI.RI_ACTIVE
+		FROM RESERV_INFO RI
+		INNER JOIN FOREIGN_GOODS_INFO FG
+		ON RI.GI_CODE = FG.GI_CODE
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE RI.RI_CODE = #{riCode}
+		UNION
+		SELECT RI.RI_CODE, RI.RI_CHECK, HG.GI_NAME, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT,
+		VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION,
+		VI.VI_NAME, VI.VI_CODE, RI.UI_NAME, RI.UI_PHONE, RI.UI_EMAIL, RI.UI_BIRTH,
+		RI.RI_ADULT_COUNT, RI.RI_KIDS_COUNT, RI.RI_BABY_COUNT, RI.RI_TGI_PRICE, RI.RI_CHECK, RI.RI_ACTIVE
+		FROM RESERV_INFO RI
+		INNER JOIN HOME_GOODS_INFO HG
+		ON RI.GI_CODE = HG.GI_CODE
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE RI.RI_CODE = #{riCode}
+	</select>
+	
+	<!-- 예약번호로 동행인 정보 불러오기 -->
+	<select id="selectCompanionByRiCode" resultType="xyz.tour.newworld.vo.CompanionInfoVO">
+		SELECT CO_NAME, CO_BIRTH, CO_GENDER, CO_ENG_FIRST, CO_ENG_NAME, CO_PHONE, CO_EMAIL 
+		FROM COMPANION_INFO
+		WHERE RI_CODE = #{riCode}
+	</select>
+	
+	<!-- 예약 상세 페이지에서 결제 정보가 있을 경우 결제내역보기 뜨게함 -->
+	<select id="reservInfoCheck" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT *
+		FROM RESERV_INFO
+		WHERE UI_ID = #{uiId}
+		AND RI_CODE = #{riCode}
+		AND RI_ACTIVE = '0' <!-- 예약 ok -->
+		AND RI_CHECK = '1'  <!-- 결제 ok -->
+	</select>
+	
+	<!-- 예약 상세 페이지에서 결제 정보가 없을 경우 결제하기 뜨게함 -->
+	<select id="reservInfoOrder" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT *
+		FROM RESERV_INFO
+		WHERE UI_ID = #{uiId}
+		AND RI_CODE = #{riCode}
+		AND RI_ACTIVE = '0'  <!-- 예약 ok -->
+		AND RI_CHECK = '0'   <!-- 결제 no -->
+	</select>
+	
+	<!-- 예약 상세 페이지에서 예약 취소된 건일 경우 버튼 아무것도 안뜸 -->
+	<select id="reservInfoCancel" resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT *
+		FROM RESERV_INFO
+		WHERE UI_ID = #{uiId}
+		AND RI_CODE = #{riCode}
+		AND RI_ACTIVE = '1'  <!-- 예약 no -->
+		AND RI_CHECK = '0'   <!-- 결제 no -->
+	</select>
+	
+	
+</mapper>

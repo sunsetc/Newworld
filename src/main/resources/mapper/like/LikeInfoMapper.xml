@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.LikeInfoMapper">
+
+<select id="selectLikeInfos" resultType="xyz.tour.newworld.vo.LikeInfoVO"> <!-- 내가 찜한목록 -->
+	SELECT LI.LI_NUM, LI.UI_ID, LI.GI_CODE,
+	FG.GI_IMAGE1, FG.GI_NAME, FG.GI_HASHTAG, FG.GI_PERIOD_ABOUT, FG.GI_PERIOD, FG.GI_PRICE_ADULT
+	FROM LIKE_INFO LI
+	INNER JOIN FOREIGN_GOODS_INFO FG
+	ON LI.GI_CODE = FG.GI_CODE
+	WHERE LI.UI_ID = #{uiId}
+	UNION ALL
+	SELECT LI.LI_NUM, LI.UI_ID, LI.GI_CODE,
+	HG.GI_IMAGE1, HG.GI_NAME, HG.GI_HASHTAG, HG.GI_PERIOD_ABOUT, HG.GI_PERIOD, HG.GI_PRICE_ADULT
+	FROM LIKE_INFO LI
+	INNER JOIN HOME_GOODS_INFO HG
+	ON LI.GI_CODE = HG.GI_CODE
+	WHERE LI.UI_ID = #{uiId}
+</select>
+
+<select id="selectLikeInfo" resultType="xyz.tour.newworld.vo.LikeInfoVO"> <!--해외 패키지 찜하기 유지-->
+SELECT LI_NUM, UI_ID, GI_CODE
+FROM LIKE_INFO
+WHERE UI_ID=#{uiId} AND GI_CODE=#{giCode};
+</select>
+
+
+<insert id="insertLikeInfo"> <!-- 찜하기 버튼 눌렀을 때 -->
+INSERT INTO LIKE_INFO(
+UI_ID, GI_CODE
+)
+VALUES(
+#{uiId},#{giCode}
+)
+</insert>
+
+
+<delete id="deleteLikeInfoByUserIdAndGiCode" parameterType="map"> <!-- 찜하기 버튼 해제 했을 때 해외상품 -->
+DELETE FROM LIKE_INFO
+WHERE UI_ID = #{uiId} AND GI_CODE = #{giCode}
+</delete>
+
+
+<!-- 
+
+<delete id="deleteForeignLikeInfo">
+DELETE FROM LIKE_INFO
+WHERE FO_GI_CODE = #{foGiCode}
+</delete>
+
+<delete id="deleteHomeLikeInfo">
+DELETE FROM LIKE_INFO
+WHERE FO_GI_CODE = #{foGiCode}
+</delete>
+
+ -->
+
+
+</mapper>

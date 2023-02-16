@@ -1,0 +1,101 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: 600px;
+}
+
+
+ul {
+	list-style: none;
+}
+
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+.qnapage{
+ 	position: relative;
+ 	top: 50px;
+ 	left: 640px;
+ 	width: 910px;
+ 	height: auto;
+	margin-bottom:300px;
+	font-family: 'NanumSquareNeo';
+}
+
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+.qnabtn1 {
+	background-color: #4093d0;
+	font-size: 17px;
+	border: none;
+	padding:4px;
+	margin: 10px;
+	width: 120px;
+	height: 50px;
+	color:#fff;
+}
+
+.qnabtn2 {
+	background-color: #9acbe2;
+	font-size: 17px;
+	border: none;
+	padding:4px;
+	margin: 10px;
+	width: 120px;
+	height: 50px;
+	color:#fff;
+	
+}
+
+
+.qnabtn1:hover, .qnabtn2:hover {
+	cursor: pointer;
+	background-color: #0e74be;
+}
+
+.been {
+	width: 800px;
+	height: 400px;
+}

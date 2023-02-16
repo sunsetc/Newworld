@@ -1,0 +1,107 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	min-height:800px;
+}
+
+ul {
+	list-style: none;
+}
+
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+.qnapage{
+ position: relative;
+ top: 50px;
+ left: 640px;
+ width: 910px;
+ height: auto;
+ margin-bottom:100px;
+ font-family: 'NanumSquareNeo';
+}
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+/*테이블*/
+.table-light {
+	position: relative;
+	text-align: left;
+	top: 0px;
+}
+.table-light  th {
+	color: #5D5D5D;
+}
+
+.table-light input {
+	width: 695px;
+	height: 30px;
+}
+
+.table-light select {
+	width: 695px;
+	height: 30px;
+	color: #5D5D5D;
+}
+
+
+/*목록버튼*/
+.fnalist {
+	position: relative;
+	top: 0px;
+	left: 38%;
+	border: none;
+	background-color: #4093d0;
+	font-size: 16px;
+	height: 40px;
+	width: 100px;
+	margin: 50px;
+	color:#fff;
+}
+
+.fnalist:hover {
+	cursor: pointer;
+	background-color: #0e74be;
+}

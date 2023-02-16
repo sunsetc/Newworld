@@ -1,0 +1,26 @@
+
+/*사이드메뉴*/
+.sidemeun {
+ position: absolute;
+ top: 50px;
+ left: 350px;
+ width: 0px;
+ height: 200px;
+}
+
+.cusstmenu {
+	width: 155px;
+	font-size: 30px;
+	font-family: 'NanumSquareNeoExtraBold';
+	line-height: 72px;
+	border-bottom: 2px solid #6799FF;
+}
+
+.notemenu, .qnamenu, .faqmenu {
+	position: relative;
+	line-height: 50px;
+	border-bottom: 1px solid #BDBDBD;
+	list-style:none;
+	left: -30px;
+	width: 155px;
+}

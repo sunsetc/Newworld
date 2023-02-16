@@ -1,0 +1,24 @@
+body {
+	width: 300px;
+	height: auto;
+}
+
+/* 본문시작 */
+
+.packagepage {
+	position: relative;
+	width: 100%;
+	height: auto;
+	font-family: 'NanumSquareNeo';
+	padding-top: 50px;
+	left:50px;
+}
+
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:20px;
+	font-weight: bold;
+}

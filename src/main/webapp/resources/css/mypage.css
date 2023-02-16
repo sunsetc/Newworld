@@ -1,0 +1,184 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	
+}
+
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+.notepage{
+ position: relative;
+ top: 50px;
+ left: 640px;
+ width: 910px;
+ height: auto;
+ margin-bottom:200px;
+ font-family: 'NanumSquareNeo';
+}
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+.btnicons button{
+	background-color: #fff;
+	font-size: 20px;
+	border: 0;
+	color: #000;
+	margin: 0px 20px -50px;
+	width: 160px;
+	height: 140px;
+}
+
+.coloricons button {
+	background-color: #fff;
+	font-size: 20px;
+	border: 0;
+	color: #000;
+	margin: 0px 20px -50px;
+	width: 160px;
+	height: 0px;
+	
+	position: relative;
+ 	top: -140px;
+ 	z-index:-1;
+}
+
+.line1, .line2, .line3{
+	position: relative;
+	top: 50px;
+	left: 0px;
+	height: 110px;
+	padding: 0px;
+	margin: 0px;
+	display: inline-block;
+	border-right: 2px solid #BDBDBD;
+}
+
+.line4, .line5, .line6{
+	position: relative;
+	top:-90px;
+	left: 36px;
+	height: 110px;
+	padding: 0px;
+	margin: 0px;
+	display: inline-block;
+	border-right: 2px solid #fff;
+ 	z-index:-1;
+}
+
+.qnabtn:hover, .reserlist:hover, .review:hover, .collect:hover {
+	cursor: pointer;
+	opacity: 0.0;
+}
+
+.sammllreser {
+	position: relative;
+	font-weight: bold;
+	font-size: 20px;
+	top: 80px;
+}
+
+.sammllqna {
+	position: relative;
+	font-weight: bold;
+	font-size: 20px;
+	top: 130px;
+}
+
+.more1 {
+	position: relative;
+	top: 30px;
+	left: 850px;
+	background-color: #fff;
+	border: 0;
+}
+
+
+.more2 {
+	position: relative;
+	top: 30px;
+	left: 850px;
+	background-color: #fff;
+	border: 0;
+	margin-top: 50px;
+}
+
+.more1:focus, .more2:focus {
+	cursor: pointer;
+	outline: none;
+}
+
+/*테이블*/
+.table-striped {
+	position: relative;
+	text-align: center;
+	top: 50px;
+}
+
+.table-striped tr {
+	font-size: 14px;
+}
+
+
+/*등록버튼*/
+.qnainsert {
+	position: relative;
+	top: 40px;
+	left: 790px;
+	border: 0;
+	background-color: #8BBDFF;
+	font-size: 16px;
+	height: 40px;
+	width: 100px;
+	margin: 20px;
+}
+
+.qnainsert:hover {
+	cursor: pointer;
+	background-color: #79ABFF;
+}
+

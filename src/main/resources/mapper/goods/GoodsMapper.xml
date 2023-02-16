@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.GoodsInfoMapper">
+	
+	<!-- 해외 -->
+	<select id="selectForeignGoods" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 해외 패키지 목록 불러오기 -->
+		SELECT GI_NUM, GI_CODE, GI_NAME, GI_HASHTAG, GI_PERIOD, GI_PERIOD_ABOUT, GI_PRICE_ADULT, GI_MAX, GI_IMAGE1
+		FROM FOREIGN_GOODS_INFO
+		<where>
+			<if test='giName != null and giName != ""'>
+				AND GI_NAME LIKE CONCAT('%',#{giName},'%')
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 국내 -->
+	<select id="selectHomeGoods" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 국내 패키지 목록 불러오기 -->
+		SELECT GI_NUM, GI_NAME, GI_HASHTAG, GI_CODE, GI_PERIOD, GI_PERIOD_ABOUT, GI_PRICE_ADULT, GI_MAX, GI_IMAGE1
+		FROM HOME_GOODS_INFO
+		<where>
+			<if test='giName != null and giName != ""'>
+				AND GI_NAME LIKE CONCAT('%',#{giName},'%')
+			</if>
+		</where>
+	</select>
+	
+	<!-- 공통 -->
+	<select id="getGoods" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 패키지 상세 페이지에서 패키지 정보 불러오기 -->
+		SELECT FG.GI_NAME, FG.GI_CODE, FG.GI_ETC, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT, FG.GI_HASHTAG, FG.GI_PRICE_ADULT, FG.GI_IMAGE1, FG.GI_IMAGE2, FG.GI_IMAGE3, FG.GI_IMAGE4, FG.GI_PRICE_KID, FG.GI_PRICE_BABY,
+		FG.GI_MAX, FG.GI_1MAX, VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+		UNION ALL
+		SELECT HG.GI_NAME, HG.GI_CODE, HG.GI_ETC, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT, HG.GI_HASHTAG, HG.GI_PRICE_ADULT, HG.GI_IMAGE1, HG.GI_IMAGE2, HG.GI_IMAGE3, HG.GI_IMAGE4, HG.GI_PRICE_KID, HG.GI_PRICE_BABY,
+		HG.GI_MAX, HG.GI_1MAX, VI.VI_NAME, VI.VI_START, VI.VI_ARR, VI.VI_DEPARTURE, VI.VI_DESTINATION
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE GI_CODE = #{giCode}
+	</select>
+	
+	<select id="residualSeats" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 잔여수량 -->
+		SELECT IFNULL(FOREIGN_GOODS_INFO.GI_MAX, 0)
+		- IFNULL((SELECT SUM(RI_ADULT_COUNT + RI_KIDS_COUNT + RI_BABY_COUNT) FROM RESERV_INFO WHERE GI_CODE = #{giCode} AND RI_ACTIVE='0'), 0) rest
+		FROM FOREIGN_GOODS_INFO
+		WHERE GI_CODE = #{giCode}
+		UNION ALL
+		SELECT IFNULL(HOME_GOODS_INFO.GI_MAX, 0)
+		- IFNULL((SELECT SUM(RI_ADULT_COUNT + RI_KIDS_COUNT + RI_BABY_COUNT) FROM RESERV_INFO WHERE GI_CODE = #{giCode} AND RI_ACTIVE='0'), 0) rest
+		FROM HOME_GOODS_INFO
+		WHERE GI_CODE = #{giCode}
+	</select>
+	
+	<select id="selectGoodsCategory" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO"> <!-- 카테고리별 패키지 목록 불러오기 -->
+		SELECT HG.GI_NUM, HG.GI_CODE, HG.GI_NAME, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT, HG.GI_HASHTAG, HG.GI_PRICE_ADULT, HG.GI_MAX, HG.GI_IMAGE1,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE GI_CATEGORY = #{giCategory}
+		UNION ALL
+		SELECT FG.GI_NUM, FG.GI_CODE, FG.GI_NAME, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT, FG.GI_HASHTAG, FG.GI_PRICE_ADULT, FG.GI_MAX, FG.GI_IMAGE1,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE GI_CATEGORY = #{giCategory}
+	</select>
+	
+	
+	
+	<!-- 검색 -->
+	<select id="goodsSearch" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO">
+		SELECT FG.GI_NUM, FG.GI_CODE, FG.GI_NAME, FG.GI_HASHTAG, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT, FG.GI_PRICE_ADULT, FG.GI_ETC, FG.GI_MAX, FG.GI_IMAGE1,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE FG.GI_NAME LIKE CONCAT('%', #{giName}, '%')
+		OR FG.GI_HASHTAG LIKE CONCAT('%', #{giName}, '%')
+		UNION ALL
+		SELECT HG.GI_NUM, HG.GI_CODE, HG.GI_NAME, HG.GI_HASHTAG, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT, HG.GI_PRICE_ADULT, HG.GI_ETC, HG.GI_MAX, HG.GI_IMAGE1,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE HG.GI_NAME LIKE CONCAT('%', #{giName}, '%')
+		OR HG.GI_HASHTAG LIKE CONCAT('%', #{giName}, '%')
+	</select>
+	
+	<!-- ETC별 검색 -->
+	<select id="goodsSearchByEtc" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO">
+		SELECT FG.GI_NUM, FG.GI_CODE, FG.GI_NAME, FG.GI_HASHTAG, FG.GI_PERIOD, FG.GI_PERIOD_ABOUT, FG.GI_PRICE_ADULT, FG.GI_ETC, FG.GI_MAX, FG.GI_IMAGE1,
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM FOREIGN_GOODS_INFO FG
+		INNER JOIN VEHICLE_INFO VI
+		ON FG.VI_CODE = VI.VI_CODE
+		WHERE (FG.GI_ETC = #{giEtc}
+		AND FG.GI_NAME LIKE CONCAT('%', #{giName}, '%'))
+		OR
+		(FG.GI_ETC = #{giEtc}
+		AND FG.GI_HASHTAG LIKE CONCAT('%', #{giName}, '%'))
+		UNION ALL
+		SELECT HG.GI_NUM, HG.GI_CODE, HG.GI_NAME, HG.GI_HASHTAG, HG.GI_PERIOD, HG.GI_PERIOD_ABOUT, HG.GI_PRICE_ADULT, HG.GI_ETC, HG.GI_MAX, HG.GI_IMAGE1, 
+		VI.VI_NAME, VI.VI_START, VI.VI_ARR
+		FROM HOME_GOODS_INFO HG
+		INNER JOIN VEHICLE_INFO VI
+		ON HG.VI_CODE = VI.VI_CODE
+		WHERE (HG.GI_ETC = #{giEtc}
+		AND HG.GI_NAME LIKE CONCAT('%', #{giName}, '%'))
+		OR
+		(HG.GI_ETC = #{giEtc}
+		AND HG.GI_HASHTAG LIKE CONCAT('%', #{giName}, '%'))
+	</select>
+	
+	
+	
+	<!-- 메인 -->
+	<select id="mainGoods" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO">
+		SELECT FG.GI_NAME, FG.GI_HASHTAG, FG.GI_PRICE_ADULT, FG.GI_IMAGE1
+		FROM FOREIGN_GOODS_INFO FG
+		WHERE FG.GI_CODE = 'HW01' OR FG.GI_CODE = 'FR01' OR FG.GI_CODE = 'JE01' OR FG.GI_CODE = 'BU01'
+		UNION ALL
+		SELECT HG.GI_NAME, HG.GI_HASHTAG, HG.GI_PRICE_ADULT, HG.GI_IMAGE1
+		FROM HOME_GOODS_INFO HG
+		WHERE HG.GI_CODE = 'HW01' OR HG.GI_CODE = 'FR01' OR HG.GI_CODE = 'JE01' OR HG.GI_CODE = 'BU01'
+	</select>
+</mapper>

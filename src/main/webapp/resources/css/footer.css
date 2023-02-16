@@ -1,0 +1,33 @@
+#main_page_4 {
+	position: relative;
+	width: 1920px;
+	height: 250px;
+	top: 50px;
+}
+
+.footermenu {
+	position: absolute;
+	left: 300px;
+}
+
+.footermenu ul {
+	list-style: none;
+}
+
+.footermenu li {
+	cursor: default;
+	font-family: 'NanumSquareNeo';
+}
+
+.topmeun {
+	display: inline-block;
+	margin: 0px 20px 10px 10px;
+	font-size: 14px;
+}
+
+.bottommenu {
+	display: inline-block;
+	margin: 0px 20px 0px 10px;
+	font-size: 12px;
+	font-weight: bold;
+}

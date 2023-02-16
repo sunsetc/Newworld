@@ -1,0 +1,144 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+}
+
+
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+
+.packagepage{
+ position: relative;
+ top: 50px;
+ left: 350px;
+ width: 1200px;
+ height: auto;
+ margin-bottom:200px;
+ font-family: 'NanumSquareNeo';
+}
+
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+.eventpage{
+	position: relative;
+	width:1200px;
+	height:423px;
+}
+
+.fortune1 {
+	position:absolute;
+	top:176px;
+	left:528px;
+}
+
+.fortune2 {
+	position:absolute;
+	top:277px;
+	left:428px;
+}
+
+
+.fortune3 {
+	position:absolute;
+	top:277px;
+	left:635px;
+}
+
+.fbtn {
+	position:absolute;
+	width:100px;
+	height:100px;
+	border:0;
+	z-index:0;
+	left:10px;
+ 	opacity: 0.0;
+}
+
+.fortune1 {
+    animation: spinFbtn1 1000ms linear infinite alternate;
+}
+
+.fortune2 {
+	animation: spinFbtn2 1000ms linear infinite alternate;
+}
+
+.fortune3 {
+	animation: spinFbtn3 1000ms linear infinite alternate;
+}
+
+@keyframes spinFbtn1 {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
+}
+@keyframes spinFbtn2 {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
+}
+@keyframes spinFbtn3 {
+    from { transform: rotate(-10deg); }
+    to { transform: rotate(10deg); }
+}
+
+.listbtn {
+	position:absolute;
+	background-color: #4093d0;
+	font-size: 17px;
+	border: none;
+	padding:4px;
+	margin-top: 30px;
+	width: 120px;
+	height: 50px;
+	left:550px;
+	color:#fff;
+}
+
+.listbtn:hover {
+	cursor: pointer;
+	background-color: #0e74be;
+}

@@ -1,0 +1,106 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: relative;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	min-height:800px;
+}
+
+
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+
+.packagepage {
+	position: relative;
+	top: 50px;
+	left: 640px;
+	width: 910px;
+	height: auto;
+	margin-bottom: 100px;
+	font-family: 'NanumSquareNeo';
+}
+
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+.table-borderless tr {
+	font-family: 'NanumGothic';
+	font-size: 16px;
+	text-align: left;
+}
+
+.resurbtn {
+	position: absolute;
+	background-color: #4093d0;
+	font-size: 14px;
+	border: none;
+	padding: 10px;
+	left:352px;
+	width: 180px;
+	height: 50px;
+	margin:10px;
+	color: #fff;
+}
+
+.deletebtn {
+	position: relative;
+	left: 760px;
+	background-color: #fff;
+	border:0;
+}
+
+.resurbtn:hover{
+	background-color: #74add7;
+}
+
+
+/* 페이지 버튼 */
+.pagination {
+	position: relative;
+	left:400px;
+	cursor: pointer;
+}

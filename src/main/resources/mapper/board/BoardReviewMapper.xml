@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.BoardReviewMapper">
+
+<!-- 상품 페이지에서 리뷰 가져오기 -->
+<select id="getReview" resultType="xyz.tour.newworld.vo.BoardReviewVO">
+	SELECT BR.BR_CONTENT, BR.BR_STAR, BR.BR_GI_CODE_FO, BR.BR_GI_CODE_HO, BR.BR_GI_CODE_HO, BR.BR_DATA, BR.UI_ID,
+	UI.UI_NAME, FG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN USER_INFO UI
+	ON BR.UI_ID = UI.UI_ID
+	INNER JOIN FOREIGN_GOODS_INFO FG
+	ON BR.BR_GI_CODE_FO = FG.GI_CODE
+	WHERE BR.BR_GI_CODE_FO = #{giCode}
+	UNION ALL
+	SELECT BR.BR_CONTENT, BR.BR_STAR, BR.BR_GI_CODE_FO, BR.BR_GI_CODE_HO, BR.BR_GI_CODE_HO, BR.BR_DATA, BR.UI_ID,
+	UI.UI_NAME, HG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN USER_INFO UI
+	ON BR.UI_ID = UI.UI_ID
+	INNER JOIN HOME_GOODS_INFO HG
+	ON BR.BR_GI_CODE_HO = HG.GI_CODE
+	WHERE BR.BR_GI_CODE_HO = #{giCode}
+	ORDER BY BR_DATA DESC
+</select>
+
+<!-- 내가 쓴 리뷰 조회 -->
+<select id="reviewList" resultType="xyz.tour.newworld.vo.BoardReviewVO">
+	SELECT BR.BR_NUM,BR.BR_CONTENT, BR.BR_STAR, BR.BR_GI_CODE_FO, BR.BR_GI_CODE_HO, BR.BR_DATA, BR.UI_ID,
+	RI.UI_NAME, RI.RI_CODE, FG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN RESERV_INFO RI
+	ON BR.UI_ID = RI.UI_ID
+	INNER JOIN FOREIGN_GOODS_INFO FG
+	ON BR.BR_GI_CODE_FO = FG.GI_CODE
+	WHERE BR.UI_ID = #{uiId}
+	AND BR.BR_GI_CODE_FO = RI.GI_CODE
+	AND BR.RI_CODE = RI.RI_CODE
+	UNION ALL
+	SELECT BR.BR_NUM,BR.BR_CONTENT, BR.BR_STAR, BR.BR_GI_CODE_FO, BR.BR_GI_CODE_HO, BR.BR_DATA, BR.UI_ID,
+	RI.UI_NAME, RI.RI_CODE, HG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN RESERV_INFO RI
+	ON BR.UI_ID = RI.UI_ID
+	INNER JOIN HOME_GOODS_INFO HG
+	ON BR.BR_GI_CODE_HO = HG.GI_CODE
+	WHERE BR.UI_ID = #{uiId}
+	AND BR.BR_GI_CODE_HO = RI.GI_CODE
+	AND BR.RI_CODE = RI.RI_CODE
+	ORDER BY BR_DATA DESC
+</select>
+
+<!-- 등록 가능한 리뷰 조회 -->
+<select id="possibleReview" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO">
+	SELECT FG.GI_NAME, FG.GI_HASHTAG, FG.GI_PERIOD_ABOUT, FG.GI_PERIOD, FG.GI_PRICE_ADULT, FG.GI_IMAGE1, FG.GI_CODE,
+	RI.RI_CODE
+	FROM FOREIGN_GOODS_INFO FG
+	INNER JOIN RESERV_INFO RI
+	ON FG.GI_CODE = RI.GI_CODE
+	WHERE RI.REVIEW_CHECK = 0 AND RI.RI_ACTIVE = 0 AND RI.RI_CHECK = 1 AND RI.UI_ID = #{uiId}
+	UNION ALL
+	SELECT HG.GI_NAME, HG.GI_HASHTAG, HG.GI_PERIOD_ABOUT, HG.GI_PERIOD, HG.GI_PRICE_ADULT, HG.GI_IMAGE1, HG.GI_CODE,
+	RI.RI_CODE
+	FROM HOME_GOODS_INFO HG
+	INNER JOIN RESERV_INFO RI
+	ON HG.GI_CODE = RI.GI_CODE
+	WHERE RI.REVIEW_CHECK = 0 AND RI.RI_ACTIVE = 0 AND RI.RI_CHECK = 1 AND RI.UI_ID = #{uiId}
+</select>
+
+<!-- 해외 패키지 리뷰 등록 -->
+<insert id="foreignReview" parameterType="xyz.tour.newworld.vo.BoardReviewVO">
+	INSERT INTO BOARD_REVIEW(BR_CONTENT, BR_STAR, BR_GI_CODE_FO, BR_DATA, UI_ID, RI_CODE)
+	VALUES(#{brContent}, #{brStar}, #{giCode}, DATE_FORMAT(NOW(),'%Y%m%d'), #{uiId}, #{riCode})
+</insert>
+
+<!--  국내 패키지 리뷰 등록 -->
+<insert id="homeReview" parameterType="xyz.tour.newworld.vo.BoardReviewVO">
+	INSERT INTO BOARD_REVIEW(BR_CONTENT, BR_STAR, BR_GI_CODE_HO, BR_DATA, UI_ID, RI_CODE)
+	VALUES(#{brContent}, #{brStar}, #{giCode}, DATE_FORMAT(NOW(),'%Y%m%d'), #{uiId}, #{riCode})
+</insert>
+
+<!-- 패키지 이름, 패키지 카테고리, 예약번호 가져오기 -->
+<select id="goodsGet" resultType="xyz.tour.newworld.vo.ForeignHomeGoodsInfoVO" parameterType="map">
+	SELECT FG.GI_NAME, FG.GI_ETC, RI.RI_CODE
+	FROM FOREIGN_GOODS_INFO FG
+	INNER JOIN RESERV_INFO RI
+	ON FG.GI_CODE = RI.GI_CODE
+	WHERE RI.GI_CODE = #{giCode} AND RI.UI_ID = #{uiId} AND RI.RI_ACTIVE = 0 AND RI.RI_CHECK = 1
+	UNION 
+	SELECT HG.GI_NAME, HG.GI_ETC, RI.RI_CODE 
+	FROM HOME_GOODS_INFO HG
+	INNER JOIN RESERV_INFO RI
+	ON HG.GI_CODE = RI.GI_CODE
+	WHERE RI.GI_CODE = #{giCode} AND RI.UI_ID = #{uiId} AND RI.RI_ACTIVE = 0 AND RI.RI_CHECK = 1
+</select>
+
+<!-- 리뷰 등록하면 리뷰 있는 상태로 변경 -->
+<update id="checkReview" parameterType="xyz.tour.newworld.vo.ReservationInfoVO">
+	UPDATE RESERV_INFO
+	SET REVIEW_CHECK = '1'
+	WHERE UI_ID = #{uiId} AND RI_CODE = #{riCode}
+</update>
+
+<!-- 리뷰 등록 되어있는지 확인 -->
+<select id="checkInsert" resultType="xyz.tour.newworld.vo.BoardReviewVO">
+	SELECT BR_CONTENT
+	FROM BOARD_REVIEW BR
+	WHERE BR.UI_ID= #{uiId} AND BR.RI_CODE= #{riCode}
+</select>
+
+<!-- 리뷰삭제 -->
+<delete id="removeReview" parameterType="xyz.tour.newworld.vo.BoardReviewVO">
+	DELETE FROM BOARD_REVIEW WHERE UI_ID = #{uiId} AND RI_CODE = #{riCode}
+</delete>
+
+<update id="removeReviewUpdate" parameterType="xyz.tour.newworld.vo.ReservationInfoVO">
+	UPDATE RESERV_INFO
+	SET REVIEW_CHECK = '0'
+	WHERE UI_ID = #{uiId} AND RI_CODE = #{riCode}
+</update>
+
+<select id="reviewInfo" resultType="xyz.tour.newworld.vo.BoardReviewVO">
+	SELECT BR.BR_NUM, BR.BR_CONTENT, BR.BR_STAR, BR.UI_ID, BR.RI_CODE, FG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN FOREIGN_GOODS_INFO FG
+	ON BR.BR_GI_CODE_FO = FG.GI_CODE
+	WHERE BR_NUM = #{brNum}
+	UNION
+	SELECT BR.BR_NUM, BR.BR_CONTENT, BR.BR_STAR, BR.UI_ID, BR.RI_CODE, HG.GI_NAME
+	FROM BOARD_REVIEW BR
+	INNER JOIN HOME_GOODS_INFO HG
+	ON BR.BR_GI_CODE_HO = HG.GI_CODE
+	WHERE BR_NUM = #{brNum}
+</select>
+
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.board.BoardNoteMapper">
+<sql id="boardNoteCols">
+	BN_NUM, BN_TITLE, BN_WRITER,
+	BN_CONTENT, BN_CATEGORY, BN_CREDAT
+</sql>
+	<select id="seachBoardNoteList" resultType="xyz.tour.newworld.vo.board.BoardNoteVO">  <!-- 공지사항 목록&검색 -->
+		SELECT
+		<include refid="boardNoteCols"></include>
+		FROM BOARD_NOTE
+		WHERE (BN_CATEGORY LIKE CONCAT('%',#{bnCategory},'%') AND BN_TITLE LIKE CONCAT('%',#{bnTitle},'%'))
+		OR (BN_CATEGORY LIKE CONCAT('%',#{bnCategory},'%') AND BN_CONTENT LIKE CONCAT('%',#{bnContent},'%'))
+		ORDER BY BN_NUM DESC
+	</select>
+	
+	<select id="selectBoardNote" resultType="xyz.tour.newworld.vo.board.BoardNoteVO">
+		SELECT
+		<include refid="boardNoteCols"></include>
+		FROM BOARD_NOTE
+		WHERE BN_NUM=#{bnNum}
+	</select>
+	
+	<insert id="insertBoardNote" parameterType="xyz.tour.newworld.vo.board.BoardNoteVO">
+		INSERT INTO BOARD_NOTE(BN_TITLE, BN_WRITER, BN_CONTENT, 
+		BN_CATEGORY, BN_CREDAT)
+		VALUES(#{bnTitle}, #{bnWriter},#{bnContent}, 
+		#{bnCategory}, DATE_FORMAT(NOW(), '%Y%m%d'))
+	</insert>
+	
+	<update id="updateBoardNote" parameterType="xyz.tour.newworld.vo.board.BoardNoteVO">
+		UPDATE BOARD_NOTE
+		SET BN_TITLE=#{bnTitle}, BN_WRITER=#{bnWriter}, BN_CONTENT=#{bnContent}, 
+		BN_CATEGORY=#{bnCategory}, BN_CREDAT=DATE_FORMAT(NOW(), '%Y%m%d')
+		WHERE BN_NUM=#{bnNum}
+	</update>
+	
+	<delete id="deleteBoardNote" parameterType="xyz.tour.newworld.vo.board.BoardNoteVO">
+		DELETE FROM BOARD_NOTE
+		WHERE BN_NUM=#{bnNum}
+	</delete>
+	
+	<select id="selectPrevNote" resultType="xyz.tour.newworld.vo.board.BoardNoteVO">  <!-- 이전글 -->
+		SELECT BN_NUM, BN_TITLE
+		FROM BOARD_NOTE
+		WHERE BN_NUM &lt; #{bnNum}
+		ORDER BY BN_NUM DESC LIMIT 1
+	</select>
+	
+	<select id="selectNextNote" resultType="xyz.tour.newworld.vo.board.BoardNoteVO">  <!-- 다음글 -->
+		SELECT BN_NUM, BN_TITLE
+		FROM BOARD_NOTE
+		WHERE BN_NUM &gt; #{bnNum}
+		ORDER BY BN_NUM LIMIT 1
+	</select>
+</mapper>

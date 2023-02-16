@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.board.BoardQnaMapper">
+	<sql id="boardQnaCols">
+		BQ.BQ_NUM, BQ.BQ_TITLE, BQ.BQ_CONTENT, BQ.BQ_COMMENT,
+		BQ.BQ_CREDAT, BQ.BQ_CATEGORY, BQ.UI_NUM
+	</sql>
+	<select id="seachBoardQnaList"
+		resultType="xyz.tour.newworld.vo.board.BoardQnaVO">  <!-- 1대1문의 목록&검색 -->
+		SELECT
+		BQ.BQ_NUM, BQ.BQ_TITLE, BQ.BQ_CONTENT, BQ.BQ_COMMENT,BQ_CMT_CHECK,
+		BQ.BQ_CREDAT, BQ.BQ_CATEGORY, BQ.UI_NUM, UI.UI_NUM, UI.UI_NAME
+		FROM BOARD_QNA BQ
+		INNER JOIN USER_INFO UI ON BQ.UI_NUM = UI.UI_NUM
+		WHERE BQ.UI_NUM=#{uiNum}
+		AND BQ_CMT_CHECK LIKE CONCAT('%',#{bqCmtCheck},'%')
+		AND (BQ_TITLE LIKE CONCAT('%',#{bqTitle}, '%')
+		OR BQ_CONTENT LIKE CONCAT('%',#{bqContent}, '%'))
+		ORDER BY BQ.BQ_NUM DESC
+	</select>
+
+	<select id="selectBoardQna"
+		resultType="xyz.tour.newworld.vo.board.BoardQnaVO">  <!-- 1대1문의 상세보기 -->
+		SELECT
+		<include refid="boardQnaCols"></include>
+		, UI.UI_NUM, UI.UI_PHONE, UI.UI_EMAIL, BQ.RI_CODE
+		FROM BOARD_QNA BQ
+		INNER JOIN USER_INFO UI
+		ON BQ.UI_NUM = UI.UI_NUM
+		WHERE BQ_NUM=#{bqNum}
+	</select>
+
+	<insert id="insertBoardQna"
+		parameterType="xyz.tour.newworld.vo.board.BoardQnaVO">
+		INSERT INTO BOARD_QNA(
+		BQ_TITLE, BQ_CONTENT, BQ_CREDAT,
+		BQ_CATEGORY, UI_NUM, RI_CODE)
+		VALUES(#{bqTitle}, #{bqContent},
+		DATE_FORMAT(NOW(), '%Y%m%d'),
+		#{bqCategory}, #{uiNum}, #{riCode})
+	</insert>
+
+	<update id="updateBoardQna"
+		parameterType="xyz.tour.newworld.vo.board.BoardQnaVO">
+		UPDATE BOARD_QNA
+		SET
+		BQ_TITLE=#{bqTitle},
+		BQ_CONTENT=#{bqContent},
+		BQ_CREDAT=DATE_FORMAT(NOW(), '%Y%m%d'),
+		BQ_CATEGORY=#{bqCategory},
+		UI_NUM=#{uiNum}
+		WHERE BQ_NUM=#{bqNum}
+	</update>
+
+	<delete id="deleteBoardQna"
+		parameterType="xyz.tour.newworld.vo.board.BoardQnaVO">
+		DELETE FROM BOARD_QNA
+		WHERE BQ_NUM=#{bqNum}
+	</delete>
+
+	<select id="selectReservCode"
+		resultType="xyz.tour.newworld.vo.ReservationInfoVO">
+		SELECT RI.RI_CODE
+		FROM RESERV_INFO RI
+		INNER JOIN USER_INFO UI
+		ON RI.UI_ID = UI.UI_ID
+		WHERE UI.UI_NUM=#{uiNum}
+		AND RI.RI_ACTIVE = 0
+		ORDER BY RI_CODE DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectReservCodeList"
+		resultType="xyz.tour.newworld.vo.ReservationInfoVO">  <!-- 1:1문의 등록 시 예약번호 조회용 -->
+		SELECT RI_CODE
+		FROM RESERV_INFO
+		WHERE UI_ID = #{uiId}
+		AND RI_ACTIVE = 0
+	</select>
+
+	<select id="selectPrevQna"
+		resultType="xyz.tour.newworld.vo.board.BoardQnaVO">  <!-- 이전글 -->
+		SELECT BQ_NUM, BQ_TITLE
+		FROM BOARD_QNA
+		WHERE BQ_NUM &lt; #{bqNum}
+		AND
+		UI_NUM = #{uiNum}
+		ORDER BY BQ_NUM DESC LIMIT 1
+	</select>
+
+	<select id="selectNextQna"
+		resultType="xyz.tour.newworld.vo.board.BoardQnaVO">  <!-- 다음글 -->
+		SELECT BQ_NUM, BQ_TITLE
+		FROM BOARD_QNA
+		WHERE BQ_NUM &gt; #{bqNum}
+		AND
+		UI_NUM = #{uiNum}
+		ORDER BY BQ_NUM LIMIT 1
+	</select>
+</mapper>

@@ -1,0 +1,266 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#container{
+	position: absolute;
+	width: 100%;
+	height:auto;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/*여기까지 그리드 구역 */
+
+
+/* 본문시작 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	
+}
+
+.resurpage {
+ 	position: relative;
+ 	top: 50px;
+	width: 800px;
+	height:auto;
+	padding-left:350px;
+ 	margin-bottom:100px;
+ 	font-family: 'NanumSquareNeo';
+	
+}
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 50px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+/*큰 글씨*/
+.bigtitle {
+
+	width: 1225px;
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+.packinfo {
+	position: relative;
+	width: 1225px;
+	height: 410px;
+	border-bottom: 2px solid #6799FF;
+}
+
+/* 캐러셀 */
+#carouselExampleIndicators {
+	position: absolute;
+	width: 600px;
+	height: 380px;
+	left:0px;
+
+}
+
+/* 패키지 정보 테이블 */
+#packtable {
+	position: absolute;
+	top:20px;
+	left:620px;
+}
+
+#packtable tr {
+	font-family: 'NanumSquareNeoBold';
+}
+
+.collectbtn {
+	position: absolute;
+	top:0px;
+	left:1090px;
+}
+
+/* 리뷰 아이콘! */
+.material-symbols-outlined {
+	position: absolute;
+	top:0px;
+	left:80px;
+	color: #4093d0;
+	outlined:#4093d0;
+}
+
+/* 아이콘의 숫자 */
+.reviewCount {
+	position: absolute;
+	top:0px;
+	left:105px;
+}
+
+/* 여행일정정보 */
+.tourinfo {
+	position: relative;
+	width: 800px;
+	height: 350px;
+	top:0px;
+	padding:50px;
+	z-index:-1;
+	border-bottom: 1px solid #EAEAEA;
+	font-family: 'NanumSquareNeo';
+}
+
+/* 상품 상세정보 테이블 */
+.bumtable {
+	border-top: 1px solid #EAEAEA;
+	position: relative;
+	width: 850px;
+	height: 300px;
+	padding:30px 30px;
+	top:0px;
+	left:20px;
+	font-family: 'NanumSquareNeo';
+}
+
+
+/* 상세정보 사진 */
+.viewphoto {
+	position: relative;
+	width: 800px;
+	height: auto;
+	top:0px;
+	padding-left:20px;
+	border-bottom: 1px solid #EAEAEA;
+}
+
+/* 리뷰창 */
+#accordionFlushExample {
+	margin:20px;
+	position: relative;
+	width: 800px;
+	height:auto;
+	top:0px;
+	left:0px;
+}
+
+.allReview {
+	position: absolute;
+	left:680px;
+}
+
+#pagenev{
+	position: relative;
+	left:300px;
+}
+
+.page-item:hover {
+	cursor: pointer;
+}
+
+.rightmenu {
+	position: sticky;
+	top:0px;
+	left:1300px;
+	height: 0px;
+}
+
+/* 인원선택 */
+.resurchoice {
+	position: absolute;
+	top:0px;
+	left:950px;
+	width: 100%;
+	height:auto;
+	border-left: 1px solid gray;
+	font-family: 'NanumSquareNeo';
+}
+
+/* 버튼 인풋 박스 */
+.peoplenumber {
+	position: relative;
+	top:-250px;
+	height:0px;
+	left:120px;
+}
+
+.peoplenumber button {
+	border: 0; 
+	background-color: #fff;
+}
+
+.peoplenumber input {
+	position: relative;
+	top:0px;
+	width: 25px;
+	height: 37px;
+	border:0;
+}
+
+.btngroup {
+	position: relative;
+	margin: 45px 0px 45px;
+	width: 113px;
+	height: 40px;
+	border: 1px solid gray; 
+}
+
+.num_sum:focus {
+	outline:none;
+}
+
+.resurtext {
+	position: relative;
+	top:30px;
+	left:30px;
+}
+
+
+/* 총금액칸 */
+.summoney{
+	position: relative;
+	top:0px;
+	width: 250px;
+	height: 230px;
+	padding:20px 0px 10px;
+	border-top: 1px solid #6799FF;
+}
+
+.summoneytext {
+	position: relative;
+	top:0px;
+	left:0px;
+}
+
+/* 예약하기 버튼 */
+.resurbtn {
+	position: relative;
+	border:0;
+	margin-top:10px;
+	background-color: #4093d0;
+	color:#fff;
+}
+
+.resurbtn:hover {
+	cursor: pointer;
+	background-color: #0e74be;
+}

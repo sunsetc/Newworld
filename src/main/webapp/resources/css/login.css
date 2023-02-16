@@ -1,0 +1,106 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: relative;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/*여기까지 그리드 구역 */
+
+
+/* 본문시작 */
+ul {
+	list-style: none;
+}
+
+.loginpage {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 910px;
+	height: 400px;
+}
+
+
+/*로그인 입력폼*/
+#userlogin {
+	position: relative;
+	margin-top: 150px;
+	margin-left: 700px;
+	font-size: 16px;
+	top: 0px;
+	left: 0px;
+	font-family: 'NanumSquareNeo';
+}
+
+#uiId, #uiPwd {
+	width: 500px;
+	height: 50px;
+	border: 1px solid #8BBDFF;
+	margin-bottom: 20px;
+	border-radius: 20px;
+
+}
+
+#uiId:focus {
+	outline-style: none;
+}
+
+#uiPwd:focus {
+	outline-style: none;
+}
+
+.smallmenuall {
+	position: relative;
+	width: 300px;
+	top: 10px;
+	left: 785px;
+	font-size: 13px;
+} 
+
+.smallmenuall li {
+	float: left;
+	margin: 10px;
+}
+
+
+#login_btn {
+	position: relative;
+	width: 505px;
+	height: 80px;
+	background-color: #4093d0;
+	text-align: center;
+
+	top: 0px;
+	left: 700px;
+	color: white;
+	font-size: 20px;
+	border: none;
+}
+
+#login_btn:hover {
+	background-color: #0e74be;
+	border: #1e5142;
+	cursor: pointer;
+}
+
+.been {
+	width: 800px;
+	height: 200px;
+}

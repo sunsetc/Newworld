@@ -1,0 +1,92 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: relative;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+/*여기까지 그리드 구역 */
+/* 본문시작 */
+ul {
+	list-style: none;
+}
+
+/*회원가입 입력폼*/
+#userjoin {
+	position: relative;
+	margin-top: 150px;
+	margin-left: 700px;
+	font-size: 16px;
+	top: -50px;
+	left: 0px;
+	font-family: 'NanumSquareNeo';
+}
+
+#uiId, #uiName, #uiPwd, #uiPwdCheck, #uiEmail, #uiZip, #uiAddr1, #uiAddr2, #uiPhone, #emailCode, #uiBirth{
+	width: 500px;
+	height: 50px;
+	border: 1px solid #8BBDFF;
+	margin-bottom: 15px;
+}
+.idBtn, .addrBtn, .emailbtn, .emailCheckbtn  {
+	position: relative;
+	width: 100px;
+	border: none;
+	margin: 10;
+	padding: 15px;
+	background-color: #9acbe2;
+}
+input:focus {
+	outline-style: none;
+}
+input::placeholder {
+	color: #1e5142a1;
+}
+.form-check-label {
+	display: inline;
+}
+#join_btn {
+	position: relative;
+	width: 505px;
+	height: 80px;
+	background-color: #4093d0;
+	text-align: center;
+
+	top: 20px;
+	left: 0px;
+	color: white;
+	font-size: 20px;
+	border: none;
+}
+#join_btn:hover {
+	background-color: #0e74be;
+	cursor: pointer;
+}
+.idBtn:hover, .addrBtn:hover, .emailbtn:hover, .emailCheckbtn:hover {
+	background-color: #74add7;
+	cursor: pointer;
+}
+
+.been {
+	width: 800px;
+	height: 200px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance:none;
+}

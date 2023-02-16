@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.PayMapper">
+
+
+	<!-- 결제시 결제 정보 DB에 저장 -->
+	<insert id="payinsert" parameterType="xyz.tour.newworld.vo.pay.PayResponseVO">
+		INSERT INTO PAY_INFO(imp_uid, merchant_uid, pay_method, pg_provider, 
+		pg_tid, apply_num, card_name, card_quota, `name`, amount, buyer_name, `status`, fail_reason, paid_at, started_at, refund)
+		VALUES(#{impUid}, #{merchantUid}, #{payMethod}, #{pgProvider}, 
+		#{pgTid}, #{applyNum}, #{cardName}, #{cardQuota}, #{name}, #{amount}, #{buyerName}, #{status}, #{failReason}, #{paidAt}, #{startedAt}, 'pay')
+	</insert>
+	
+	<update id="updateCheck" parameterType="xyz.tour.newworld.vo.ReservationInfoVO">
+		UPDATE RESERV_INFO
+		SET RI_CHECK = 1
+		WHERE RI_CODE = #{riCode}
+	</update>
+	
+	<!-- 결제내역창 정보 불러오기 -->
+	<select id="selectPayInfo" resultType="xyz.tour.newworld.vo.pay.PayResponseVO">
+		SELECT PA.card_name, PA.imp_uid, PA.card_quota, PA.apply_num, PA.merchant_uid, PA.amount, FG.GI_NAME
+		FROM PAY_INFO PA
+		INNER JOIN RESERV_INFO RI
+		ON RI.RI_CODE = PA.merchant_uid
+		INNER JOIN FOREIGN_GOODS_INFO FG
+		ON RI.GI_CODE = FG.GI_CODE
+		WHERE RI.RI_CODE = #{riCode}
+		AND RI.RI_CHECK = 1
+		UNION
+		SELECT PA.card_name, PA.imp_uid, PA.card_quota, PA.apply_num, PA.merchant_uid, PA.amount, HG.GI_NAME
+		FROM PAY_INFO PA
+		INNER JOIN RESERV_INFO RI
+		ON RI.RI_CODE = PA.merchant_uid
+		INNER JOIN HOME_GOODS_INFO HG
+		ON RI.GI_CODE = HG.GI_CODE
+		WHERE RI.RI_CODE = #{riCode}
+		AND RI.RI_CHECK = 1
+	</select>
+	
+	<!-- 환불할 때 결제정보 조회 -->
+	<select id="selectPay" resultType="xyz.tour.newworld.vo.pay.PayResponseVO">
+		SELECT * FROM PAY_INFO WHERE imp_uid = #{impUid} 
+	</select>
+	
+	<update id="updateRefund" parameterType="xyz.tour.newworld.vo.pay.PayResponseVO">
+		UPDATE PAY_INFO
+		SET refund = "refund"
+		WHERE merchant_uid = #{riCode}
+	</update>
+	
+	
+</mapper>

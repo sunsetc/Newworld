@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.board.BoardFnaMapper">
+<sql id="BoardFnaCols">
+	BF_NUM, BF_TITLE, BF_CATEGORY,
+	BF_CONTENT, BF_CREDAT
+</sql>
+	<select id="seachBoardFnaList" resultType="xyz.tour.newworld.vo.board.BoardFnaVO">  <!-- 질문 목록&검색 -->
+		SELECT
+		<include refid="BoardFnaCols"></include>
+		FROM BOARD_FNA
+		WHERE (BF_CATEGORY LIKE CONCAT('%',#{bfCategory},'%') AND BF_TITLE LIKE CONCAT('%',#{bfTitle},'%'))
+		OR (BF_CATEGORY LIKE CONCAT('%',#{bfCategory},'%') AND BF_CONTENT LIKE CONCAT('%',#{bfContent},'%'))
+		ORDER BY BF_NUM DESC
+	</select>
+	
+	<select id="selectBoardFna" resultType="xyz.tour.newworld.vo.board.BoardFnaVO">
+		SELECT
+		<include refid="BoardFnaCols"></include>
+		FROM BOARD_FNA
+		WHERE BF_NUM=#{bfNum}
+	</select>
+	
+	<insert id="insertBoardFna" parameterType="xyz.tour.newworld.vo.board.BoardFnaVO">
+		INSERT INTO BOARD_FNA(
+		BF_TITLE, BF_CATEGORY, 
+		BF_CONTENT, BF_CREDAT)
+		VALUES(#{bnTitle}, #{bnCategory},
+		#{bnContent}, DATE_FORMAT(NOW(), '%Y%m%d'))
+	</insert>
+	
+	<update id="updateBoardFna" parameterType="xyz.tour.newworld.vo.board.BoardFnaVO">
+		UPDATE BOARD_FNA
+		SET BF_TITLE=#{bfTitle}, BF_CATEGORY=#{bfCategory},
+		BF_CONTENT=#{bfContent}, BF_CREDAT=DATE_FORMAT(NOW(), '%Y%m%d')
+		WHERE BF_NUM=#{bfNum}
+	</update>
+	
+	<delete id="deleteBoardFna" parameterType="xyz.tour.newworld.vo.board.BoardFnaVO">
+		DELETE FROM BOARD_FNA
+		WHERE BF_NUM=#{bfNum}
+	</delete>
+	
+	<select id="selectPrevFna" resultType="xyz.tour.newworld.vo.board.BoardFnaVO">  <!-- 이전글 -->
+		SELECT BF_NUM, BF_TITLE
+		FROM BOARD_FNA
+		WHERE BF_NUM &lt; #{bfNum}
+		ORDER BY BF_NUM DESC LIMIT 1
+	</select>
+	
+	<select id="selectNextFna" resultType="xyz.tour.newworld.vo.board.BoardFnaVO">  <!-- 다음글 -->
+		SELECT BF_NUM, BF_TITLE
+		FROM BOARD_FNA
+		WHERE BF_NUM &gt; #{bfNum}
+		ORDER BY BF_NUM LIMIT 1
+	</select>
+</mapper>

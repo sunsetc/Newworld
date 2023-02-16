@@ -1,0 +1,212 @@
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+#container{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+
+/* 본문 페이지 전체 */
+
+.page1{
+	position: relative;
+	width: 100%;
+	height: auto;
+	font-family: 'NanumSquareNeo';
+}
+
+
+.resurpage {
+ 	position: relative;
+ 	top: 50px;
+	width: 1220px;
+	height:auto;
+	left:350px;
+ 	margin-bottom:100px;
+}
+
+/* 왼쪽 테이블 영역 */
+.resurtable {
+	position: relative;
+	width: 1200px;
+	top:0px;
+	height: auto;
+	left:0px;
+	font-family: 'NanumSquareNeo';
+}
+
+
+/* 오른쪽 금액안내 */
+.rightmenu {
+	position: relative;
+	top:0px;
+	left:950px;
+	width: 100%;
+	height: auto;
+	font-family: 'NanumSquareNeo';
+	
+}
+.resurchoice {
+	position: sticky;
+	width:300px;
+	top:250px;
+	left:0px;
+	height: 0px;
+	z-index:1;
+}
+
+ul {
+	list-style: none;
+}
+.smallnav {
+	position: absolute;
+	top: 230px;
+	right:370px;
+	font-size: 13px;
+	z-index:1;
+}
+
+.smallnav li {
+	display: inline-block;
+}
+
+/*큰 글씨*/
+.bigtitle {
+	line-height: 70px;
+	border-bottom: 2px solid #6799FF;
+	font-size:30px;
+	font-weight: bold;
+}
+
+
+/* 테이블 */
+.table-borderless {
+	position: relative;
+	top:0px;
+	left:0px;
+
+}
+
+/* 인원수 버튼  */
+.onecheck {
+	position: relative;
+	border: 1px solid #C7D3ED;
+	width: 300px;
+	height: 300px;
+	float: left;
+	margin:0px;
+	padding: 70px;
+}
+
+.onecheck p {
+	position: relative;
+	left:10px;
+
+}
+/* 버튼 인풋 박스 */
+
+.btngroup {
+	position: relative;
+	margin: 45px 0px 45px;
+	width: 113px;
+	height: 40px;
+	left:20px;
+	border: 1px solid gray; 
+}
+
+
+.peoplenumber {
+	position: relative;
+	top:0px;
+	left:35px;
+}
+
+.btngroup button {
+	background-color: #fff;
+	border: 0; 
+}
+
+.btngroup input {
+	position: relative;
+	width: 25px;
+	height: 37px;
+	border: 0; 
+}
+
+.btngroup input:focus {
+	outline:none;
+}
+
+.tabletext {
+	position: relative;
+	margin: 50px 0px 10px;
+}
+
+
+.form-check-input {
+	border-bottom: 1px solid balck; 
+}
+
+
+.resurtext {
+	position: relative;
+	top:50px;
+	width: 240px;
+	left:25px;
+	background-color: #D9E5FF;
+	padding:20px;
+}
+
+/* 성인 아동 유아 */
+.resurtext li {
+	display: inline;
+}
+
+.summoney{
+	position: relative;
+	top:25px;
+	width: 240px;
+	border-top: 1px solid #B5C1DB;
+	background-color: #D9E5FF;
+	border-bottom: 1px solid #B5C1DB;
+	margin:25px;
+}
+
+/* 총금액 */
+.summoneytext {
+	position: relative;
+	top:20px;
+	left:-20px;
+}
+
+.resurbtn {
+	position: relative;
+	top:10px;
+	left:0px;
+	padding:10px 0px 10px;
+	margin-bottom:10px;
+	border: 0; 
+	background-color: #4093d0;
+	color:#fff;
+}
+
+.resurbtn:hover {
+	cursor: pointer;
+	background-color: #0e74be;
+}

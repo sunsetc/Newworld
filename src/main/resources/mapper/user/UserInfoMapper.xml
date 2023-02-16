@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.UserInfoMapper">
+
+	<sql id="userInfoCols">
+		UI_ID, UI_PWD,
+		UI_NAME, UI_EMAIL, UI_ZIP,
+		UI_ADDR1, UI_ADDR2, UI_PHONE,
+		UI_GENDER, UI_BIRTH
+	</sql>
+	
+	<select id="selectUserInfo" resultType="xyz.tour.newworld.vo.UserInfoVO">		<!-- 회원정보 불러오기 -->
+		SELECT UI_NUM,
+		<include refid="userInfoCols"></include>
+		FROM USER_INFO
+		WHERE UI_NUM = #{uiNum}
+	</select>
+	
+	<select id="selectUserInfoById" resultType="xyz.tour.newworld.vo.UserInfoVO">		<!-- 아이디로 아이디 중복 체크 -->
+		SELECT UI_NUM,
+		<include refid="userInfoCols"></include>
+		FROM USER_INFO
+		WHERE UI_ID = #{uiId}
+	</select>
+	
+	<select id="selectUserInfoByIdAndPwd" resultType="xyz.tour.newworld.vo.UserInfoVO">		<!-- 로그인시 아이디 비밀번호 데이터 가져오기 -->
+		SELECT UI_NUM,
+		<include refid="userInfoCols"></include>
+		FROM USER_INFO
+		WHERE UI_ID = #{uiId}
+		AND UI_PWD = #{uiPwd}
+	</select>
+	
+	<insert id="insertUserInfo">	<!-- 회원 가입 -->
+		INSERT INTO USER_INFO(
+		UI_ID, UI_PWD, UI_NAME, UI_EMAIL,
+		UI_ZIP, UI_ADDR1, UI_ADDR2, UI_PHONE,
+		UI_GENDER, UI_BIRTH
+		)
+		VALUES(
+		#{uiId}, #{uiPwd}, #{uiName}, #{uiEmail},
+		#{uiZip}, #{uiAddr1}, #{uiAddr2}, #{uiPhone},
+		#{uiGender}, #{uiBirth}
+		)
+	</insert>
+	
+	<update id="updateEmail" parameterType="xyz.tour.newworld.vo.UserInfoVO">	<!-- 이메일 변경 -->
+		UPDATE USER_INFO
+		SET UI_EMAIL = #{uiEmail}
+		WHERE UI_NUM = #{uiNum}
+	</update>
+	
+	<update id="updateUserInfo">	<!-- 회원정보 수정 -->
+		UPDATE USER_INFO
+		SET UI_NAME = #{uiName},
+		UI_PHONE = #{uiPhone}
+		WHERE UI_NUM = #{uiNum}
+	</update>
+	
+	<update id="updateUserInfoOfPwd">	<!-- 비밀번호 변경 -->
+		UPDATE USER_INFO
+		SET UI_PWD = #{uiPwd}
+		WHERE UI_NUM = #{uiNum}
+	</update>
+	
+	<delete id="deleteUserInfo">	<!-- 회원 탈퇴 -->
+		DELETE FROM USER_INFO
+		WHERE UI_NUM = #{uiNum}
+	</delete>
+	
+	<select id="checkDeletePossible" resultType="xyz.tour.newworld.vo.UserInfoVO">   <!-- 탈퇴 가능 여부 확인 -->
+		SELECT UI.UI_ID FROM USER_INFO UI
+		INNER JOIN RESERV_INFO RI
+		ON UI.UI_ID = RI.UI_ID
+		INNER JOIN FOREIGN_GOODS_INFO FG
+		ON RI.GI_CODE = FG.GI_CODE
+		WHERE UI.UI_NUM = #{uiNum}
+		AND RI.RI_CHECK = 1
+		AND
+		(SELECT DATEDIFF((SELECT DATE_FORMAT(NOW(),'%Y.%m.%d')),(SUBSTRING(FG.GI_PERIOD_ABOUT,14)))) &lt; 0
+		UNION ALL
+		SELECT UI.UI_ID FROM USER_INFO UI
+		INNER JOIN RESERV_INFO RI
+		ON UI.UI_ID = RI.UI_ID
+		INNER JOIN HOME_GOODS_INFO HG
+		ON RI.GI_CODE = HG.GI_CODE
+		WHERE UI.UI_NUM = #{uiNum}
+		AND RI.RI_CHECK = 1
+		AND
+		(SELECT DATEDIFF((SELECT DATE_FORMAT(NOW(),'%Y.%m.%d')),(SUBSTRING(HG.GI_PERIOD_ABOUT,14)))) &lt; 0
+	</select>
+
+	<select id="findId" resultType="xyz.tour.newworld.vo.UserInfoVO">   <!-- 아이디 찾기 -->
+		SELECT UI_ID FROM USER_INFO
+		WHERE UI_EMAIL = #{uiEmail}
+	</select>
+	
+	<select id="checkEmailById" resultType="xyz.tour.newworld.vo.UserInfoVO">  <!-- 아이디로 이메일 확인 -->
+		SELECT UI_EMAIL FROM USER_INFO
+		WHERE UI_ID = #{uiId}
+	</select>
+	
+	<select id="checkEmailByName" resultType="xyz.tour.newworld.vo.UserInfoVO">  <!-- 이름으로 이메일 확인 -->
+		SELECT DISTINCT UI_EMAIL FROM USER_INFO
+		WHERE UI_NAME = #{uiName}
+	</select>
+	
+	<update id="updateTemporaryPwd">   <!-- 비밀번호 찾기를 위한 임시 비밀번호로 변경 -->
+		UPDATE USER_INFO
+		SET UI_PWD=#{uiPwd}
+		WHERE UI_ID=#{uiId}
+	</update>
+</mapper>

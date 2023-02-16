@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.tour.newworld.mapper.FileInfoMapper">
+
+	<select id="selectFileInfos" resultType="xyz.tour.newworld.vo.FileInfoVO">
+		SELECT FROM FILE_INFO
+
+	</select>
+
+	<insert id="insertFileInfo" parameterType="xyz.tour.newworld.vo.FileInfoVO">
+		INSERT INTO FILE_INFO(
+		FI_NAME, FI_PATH, FI_CONTENT
+		)
+		VALUES(
+		#{fiName},#{fiPath},#{fiContent}
+		)
+
+	</insert>
+
+</mapper>

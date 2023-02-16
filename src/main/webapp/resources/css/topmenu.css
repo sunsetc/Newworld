@@ -1,0 +1,137 @@
+#topmenu {
+	position: relative;
+	width: 100%;
+	height: 190px;
+	background-color: #fff;
+	margin:0;
+}
+
+
+/*로그인 로그아웃 마이페이지*/
+.smallmenu {
+	width: 100%;
+   	height:50px;
+}
+.smallmenu ul {
+	position: relative;
+	   padding-top:10px;
+	padding-left: 1300px;
+}
+.smallmenu li{
+	position: relative;
+	display: inline;
+	margin: 10px;
+}
+.smallmenu a{
+	font-size:13px;
+}
+
+
+
+#seconde {
+	position: relative;
+	width: 100%;
+   	height:80px;
+}
+
+.logo {
+	padding-left: 340px;
+	margin: 0;
+}
+
+.seach {
+	position: absolute;
+	top:0px;
+	left:580px;
+	margin:0;
+}
+
+.seach input{
+	width: 410px;
+	height: 50px;
+	border: 2px solid #4093d0;
+	border-radius: 40px;
+	font-size: 16px;
+}
+
+.seach input:focus {
+	outline:none;
+}
+
+.seach button{
+	position: relative;
+	left:-70px;
+	background-color: #fff;
+	border: 0;
+}
+
+.seach btton:hover {
+	cursor: pointer;
+}
+
+/* 아이콘 버튼들  */
+.coloricon {
+position: absolute;
+top:0px;
+right:395px;
+}
+.iconmenu {
+position: relative;
+top:-61px;
+}
+
+.coloricon button {
+	margin: 0px 8px 0px;
+	background-color: #fff;
+	border: 0;
+}
+
+.coloricon a {
+	text-align: center;
+	font-size:12px;
+}
+
+.iconmenu button:hover {
+	opacity: 0.0;
+}
+
+
+
+/*메뉴 선*/
+.menuline {
+	position: relative;
+	width: 100%;
+	height: 60px;
+	border-top: 1px solid #EAEAEA;
+	border-bottom: 1px solid black;
+}
+
+
+/* 메뉴 드롭다운 */
+.nav-item, .nav-item dropdown  {
+	position: relative;
+	left: 330px;
+
+}
+
+/* 메뉴의 a태그만 */
+#navbarSupportedContent a{
+	color: black;
+	font-family: 'NanumGothic';
+}
+
+.navbar-nav li{
+	padding: 0px 10px 0px;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+button {
+	font-family: 'NanumSquareNeoBold';
+	}
+	
+.bigtitle {
+	font-family: 'NanumSquareNeoExtraBold';
+}

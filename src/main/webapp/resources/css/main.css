@@ -1,0 +1,385 @@
+body {
+overflow-x: hidden;
+overflow-y: auto;
+}
+
+#container{
+	position: absolute;
+	width: 100%;
+	display: grid;
+	place-items: center;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	row-gap: 10px;
+	column-gap: 20px;
+	min-height: 100vh;
+}
+
+#cell{
+	box-sizing: border-box;
+	border: 0;
+	padding: 0px;
+}
+
+/*여기까지 그리드 구역 */
+
+
+#main_page_1 {
+	position: relative;
+	width: 100%;
+	height: 800px;
+	background-color: #B2CCFF;
+}
+
+
+/* 여행 어디로 갈 건지 질문하는 거 전체*/
+#selectAll {
+	position: absolute;
+	width: 800px;
+	top: 230px;
+	padding-left: 350px;
+}
+
+/* 고객 어떤여행 텍스트만 */
+#question {
+	font-family: 'NanumGothicBold';
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+.form-check {
+	position: relative;
+	display: flex;
+	text-decoration: none;
+	padding:0;
+}
+
+li:hover  {
+	cursor: pointer;
+}
+
+
+
+/* 인풋창 */
+.searchtrip {
+	position: relative;
+	width: 330px;
+	height: 50px;
+	border: none;
+	border-radius: 5px;
+	font-size: 20px;
+	top:3px;
+	margin-bottom:10px;
+	color: #8F8F8F;
+	z-index: 1px;
+}
+
+.searchtrip:focus{
+	outline-style: none;
+}
+
+/* 검색버튼 */
+
+.packagesc {
+	position: relative;
+	width: 330px;
+	height: 70px;
+	border: none;
+	border-radius: 5px;
+	font-size: 20px;
+	background-color: #353535;
+	color: #fff;
+}
+
+/*이미지슬라이드*/
+#carouselExampleIndicators {
+	position: absolute;
+	top: 150px;
+	left: 780px;
+	width: 800px;
+}
+
+/* 모달창 */
+#modal_iframe {
+	position: absolute;
+	top: 0px;
+	left: 930px;
+	width: 350px;
+	height:295px;
+	z-index:1;
+}
+
+/*여기까지가 이미지슬라이드와 상세검색창이 있는 부분임.*/
+
+
+/* 두번째 페이지 시작부분 */
+
+#main_page_2 {
+	position: relative;
+	width: 100%;
+	height: 1000px;
+}
+
+.pick1{
+	position: absolute;
+	font-size: 30px;
+	font-family: 'NanumSquareNeoExtraBold';
+	top:70px;
+	left:350px;
+}
+
+/* DB에서 불러오기  */
+.city_choice {
+	position: relative;
+	width: 100%;
+	height: 500px;
+}
+.goods1{
+	position: absolute;
+	top: 150px;
+	left:350px;
+	z-index:1;
+}
+.goods2{
+	position: absolute;
+	top: 150px;
+	left: 655px;
+	z-index:1;
+}
+.goods3{
+	position: absolute;
+	top: 150px;
+	left: 955px;
+	z-index:1;
+}
+.goods4{
+	position: absolute;
+	top: 150px;
+	left: 1255px;
+	z-index:1;
+}
+.text1 {
+	font-size: 14px
+}
+
+.goods1:hover, .goods2:hover, .goods3:hover, .goods4:hover {
+   opacity: 0.5;
+}
+
+.pick2{
+	position: absolute;
+	font-size: 30px;
+	font-family: 'NanumSquareNeoExtraBold';
+	top:570px;
+	left:350px;
+}
+
+/* 국가 초이스 */
+.country_choice {
+	position: relative;
+	width: 100%;
+	height: 500px;
+}
+
+.america {
+	position: absolute;
+	width: 250px;
+	top:650px;
+	left:350px;
+}
+
+.europe{
+	position: absolute;
+	width: 250px;
+	top:650px;
+	left:650px;	
+}
+
+
+.asia {
+	position: absolute;
+	width: 250px;
+	top:650px;
+	left:950px;	
+}
+
+.kor{
+	position: absolute;
+	width: 250px;
+	top:650px;
+	left:1250px;	
+}
+
+.america:hover, .europe:hover, .asia:hover, .kor:hover {
+   opacity: 0.5;
+}
+
+a:hover {
+cursor: pointer;
+}
+
+
+/*세번째 페이지*/
+#main_page_3 {
+	position: relative;
+	width: 100%;
+	height: 800px;
+	border: 0;
+	background-image: url("/resources/images/view.jpg");
+}
+
+.innerpage {
+	position: absolute;
+	width: 1200px;
+	height: 517px;
+	top:150px;
+	left:340px;
+	background-color:#fff;
+}
+
+.utube {
+	position: relative;
+	width:450px;
+	top: 75px;
+	left:30px;
+	margin:-1;
+	z-index:2;
+}
+
+.sabiya {
+	position: absolute;
+	top:0px;
+	padding-left:447px;
+	margin:-1;
+}
+
+.fortune {
+	position: absolute;
+	top:75px;
+	padding-left:936px;
+	margin:-1;
+	z-index:1;
+}
+
+
+/* 텍스트들 */
+.innertext {
+	position: absolute;
+	z-index:1;
+	font-size:14px;
+	width: 1200px;
+	height: 517px;
+	font-family: 'NanumSquareNeo';
+}
+
+
+.youtube{
+	position: absolute;
+	top:26px;
+	left:30px;
+	width: 450px;
+}
+
+.utitle {
+	position: relative;
+	width: 450px;
+	top:310px;
+	left:30px;
+	font-weight: bold;
+	font-size:16px;
+}
+
+.ucontent{
+	position: relative;
+	width: 450px;
+	top:310px;
+	left:30px;
+	font-size:14px;
+}
+
+.ulink {
+	position: relative;
+	width: 450px;
+	top:331px;
+	left:30px;
+	font-size:12px;
+}
+
+
+.getabout {
+	position: absolute;
+	top:26px;
+	left:476px;
+	color:#fff;
+}
+
+.newstitle{
+	position: relative;
+	width:446px;
+	top:149px;
+	left:476px;
+	font-weight: bold;
+	font-size:16px;
+	color:#fff;
+}
+
+.newscontent{
+	position: relative;
+	width:446px;
+	top:150px;
+	left:476px;
+	font-size:14px;
+	color:#fff;
+}
+
+.newslink{
+	position: relative;
+	width:446px;
+	top:150px;
+	left:476px;
+	font-size:12px;
+	color:#fff;
+}
+
+
+.event{
+	position: absolute;
+	top:26px;
+	left:924px;
+}
+
+
+.eventtitle{
+	position: relative;
+	width:270px;
+	top:-33px;
+	left:924px;
+	font-weight: bold;
+	font-size:16px;
+
+}
+
+.eventcontent{
+	position: relative;
+	width:270px;
+	top:-30px;
+	left:924px;
+	font-size:14px;
+}
+
+.eventlink{
+	position: relative;
+	width:270px;
+	top:-10px;
+	left:924px;
+	font-size:12px;
+}
+
+/* 
+.call button{
+	width: 130px;
+	height: 150px;
+	margin: 5px;
+	background-color: rgba( 255, 255, 255, 0.5 );
+	border: 0;
+} */
